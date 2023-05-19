@@ -13,9 +13,9 @@ This repo contains scripts and documents to assit in the installation of Windows
   * [Operating System](#operating-system)
 * [Hardware Environment](#hardware-environment)
   * [Monitors Connected to Builtin VGA](#monitors-connected-to-builtin-vga)
-  * [Monitors Cconnected to GPU Video](#monitors-connected-to-gpu-video-output)
+  * [Monitors Connected to GPU Video](#monitors-connected-to-gpu-video-output)
   * [Install Nvidia GPU](#install-nvidia-gpu)
-  * [GPU power Connectors](#gpu-power-connectors)
+  * [GPU Power Connectors](#gpu-power-connectors)
   * [Set Up Audio](#set-up-audio)
 * [Installation Guide](#installation-guide)
   * [Install Ubuntu Desktop](#install-ubuntu-desktop)
@@ -149,7 +149,7 @@ Download Remote Ripple[^3], and install it, and then connect to the server:59xx 
 
 Flatpak[^4] collected a lots of applications that supports both amd64 and Aarch64/Arm64. On Ubuntu, it can be installed with the follow commands.
 ```
-sudo ./install_flatpak.sh
+sudo ./scripts/install_flatpak.sh
 ```
 **Note**: Installing applications from GUI might be broken.
 
@@ -164,7 +164,7 @@ sudo systemctl restart ntp
 
 Install Dhewm3 and Demo Pack of DOOM3 with the following command[^5]. 
 ```
-sudo ./install_dhewm3.sh
+sudo ./scripts/install_dhewm3.sh
 ```
 
 Run DOOM3
