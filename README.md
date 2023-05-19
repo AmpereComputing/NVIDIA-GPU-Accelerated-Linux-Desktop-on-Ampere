@@ -19,18 +19,18 @@ This repo contains scripts and documents to assit in the installation of Windows
   * [Set Up Audio](#set-up-audio)
 * [Installation Guide](#installation-guide)
   * [Install Ubuntu Desktop](#install-ubuntu-desktop)
-* Applications
+* [Applications](#applications)
   * [Install Flatpak](#install-flatpak)
   * [Install Dhewm3 - Open Source Version of DOOM3](#install-dhewm3---open-source-version-of-doom3)
-  * Paraview
-  * Yolov8
-  * HPC
-* Application Development
-  * Electron
-  * VS Code
-  * Flutter
-  * Android Studio
-  * Jetson 
+  * [TODO]Paraview
+  * [TODO]Yolov8
+  * [TODO]HPC
+* [Application Development](#applications-development)
+  * [TODO]Electron
+  * [TODO]VS Code
+  * [TODO]Flutter
+  * [TODO]Android Studio
+  * [TODO]Jetson 
 * [References](#references)
 
 ## Introduction
