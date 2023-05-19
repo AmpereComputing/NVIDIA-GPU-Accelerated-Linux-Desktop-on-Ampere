@@ -16,17 +16,12 @@ This repo contains scripts and documents to assit in the installation of Windows
   * [Monitors Cconnected to GPU Video](#monitors-connected-to-gpu-video-output)
   * [Install Nvidia GPU](#install-nvidia-gpu)
   * [GPU power Connectors](#gpu-power-connectors)
+  * [Set Up Audio](#set-up-audio)
 * [Installation Guide](#installation-guide)
-  * [Install Ubuntu 20.04 or 22.04 with USB](#install-ubuntu-2004-or-2204-with-usb)
-  * [Install GPU driver](#install-gpu-driver)
-  * [Install Desktop environment](#install-desktop-environment)
-  * [Set up Audio](#set-up-audio)
-  * [Verify GPU accelerated desktop](#verify-gpu-accelerated-desktop)
-  * [Setup Multiple Monitors](#setup-multiple-monitors)
-  * [Share Desktop Remotely](#share-desktop-remotely)
+  * [Install Ubuntu Desktop](#install-ubuntu-desktop)
 * Applications
   * [Install Flatpak](#install-flatpak)
-  * [Install Dhewm3 - Open Source Version of DOOM3]
+  * [Install Dhewm3 - Open Source Version of DOOM3](#install-dhewm3---open-source-version-of-doom3)
   * Paraview
   * Yolov8
   * HPC
@@ -66,51 +61,49 @@ Install GPU at one of the two PCIex16 slots and connect power cables if needed.
 ### GPU Power Connectors
 The box comes with a spare GPU power cable hidden at the back of motherboard. 
 
-## Installation Guide
-### Install Ubuntu 20.04 or 22.04 with USB
-1. Download Ubuntu 22.04 server. 
-1. Install ubuntu with HWE
-
-### Install GPU driver
-[Download](https://www.nvidia.com/Download/driverResults.aspx/204838/en-us/) and install GPU driver 
-```
-$ sudo nano /etc/default/grub
-# Add pcie_aspm=off to kernel parameters
-# GRUB_CMDLINE_LINUX_DEFAULT="pcie_aspm=off"
-# and update grub
-$ sudo update-grub
-$ sudo reboot
-
-$ sudo rmmod nouveau
-$ cat << EOF | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
-blacklist nouveau
-options nouveau modeset=0
-EOF
-
-$ sudo update-initramfs -u -k all
-$ sudo apt install -y dkms
-$ sudo sh ./NVIDIA-Linux-aarch64-xxx.run
-# Let the installer update x-config file
-$ sudo reboot
-# check GPU drivers
-# nvidia-smi 
-```
-### Install Desktop Environment 
-```
-$ sudo apt install ubuntu-desktop
-```
-Enable GPU accelerated desktop
-```
-$ sudo nvidia-xconfig -a --cool-bits=31 --allow-empty-initial-configuration
-```
 ### Set Up Audio
 Mic/Speaker on the top of the case - A1 is not working. A2 is working
 HDMI/DisplayPort Audio - recommended for audio via TV speaker. Both audio via HDMI and DisplayPort works. 
 
 Digital Output - No physical link/plug found
 
-### Verify GPU Accelerated Desktop
-Install glmark2 
+## Installation Guide
+
+### Install Ubuntu Desktop
+
+#### Install Ubuntu 20.04 or 22.04 with USB
+1. Download Ubuntu 22.04 server. 
+1. Install ubuntu with HWE
+
+#### Install GPU driver
+
+##### Disable `aspm` from kernel
+
+```
+$ sudo nano /etc/default/grub
+# Add pcie_aspm=off to kernel parameters
+# GRUB_CMDLINE_LINUX_DEFAULT="pcie_aspm=off"
+$ sudo update-grub
+$ sudo reboot
+```
+##### Download and Install GPU Driver
+Download Nvidia GPU driver from Nvidia's site[^2] and install GPU driver with the follow script. 
+```
+# Make sure the dirver package name is updated in the script
+$ ./install_gpu_driver.sh
+```
+Check the GPU driver is working with the following command.
+```
+nvidia-smi
+```
+#### Install Desktop Environment 
+```
+sudo apt install ubuntu-desktop
+sudo reboot
+```
+**Note**: There are no output to the monitor attached to GPU before desktop. 
+
+### Verify GPU Accelerated Desktop with glmark2
 ```
 sudo apt install glmark2
 glmark2
@@ -148,29 +141,18 @@ x11vnc  -usepw -display :1
 ``` 
 
 ##### Connect to remote desktop from local clients
-Download Remote Ripple[^4], and install it, and then connect to the server:59xx with the password saved on the server.
+Download Remote Ripple[^3], and install it, and then connect to the server:59xx with the password saved on the server.
 
 ## Applications
 ### Install Flatpak
 
-[Flatpak](https://flatpak.org/) collected a lots of applications that supports both amd64 and Aarch64/Arm64. On Ubuntu, it can be installed with the follow commands.
+Flatpak[^4] collected a lots of applications that supports both amd64 and Aarch64/Arm64. On Ubuntu, it can be installed with the follow commands.
 ```
-sudo add-apt-repository ppa:flatpak/stable
-sudo apt update
-sudo apt install flatpak
-```
-#### Install Flatpak Plugin
-```
-sudo apt install gnome-software-plugin-flatpak
+sudo ./install_flatpak.sh
 ```
 **Note**: Installing applications from GUI might be broken.
 
-#### Add Flatpak Repository
-
-```
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-```
-#### Date/Time Issue
+Date/Time Issue
 If any of the commands above failed, it might be date/time issue. Use the following commands to update the system time and re-run the commands again. 
 ```
 sudo apt install ntp
@@ -178,26 +160,14 @@ sudo systemctl restart ntp
 ```
 
 ### Install Dhewm3 - Open Source Version of DOOM3
-#### Install the Application
-```
-flatpak install flathub org.dhewm3.Dhewm3
-```
-#### Download and Install Doom3 Demo Package
-```
-wget https://files.holarse-linuxgaming.de/native/Spiele/Doom%203/Demo/doom3-linux-1.1.1286-demo.x86.run
-sh doom3-linux-1.1.1286-demo.x86.run --tar xf demo/
-mkdir .var/app/org.dhewm3.Dhewm3/data/dhewm3
-mkdir .var/app/org.dhewm3.Dhewm3/data/dhewm3/base
-cp demo/demo00.pk4 .var/app/org.dhewm3.Dhewm3/data/dhewm3/base
-```
 
-**Note**: The demo data can also be used command line without copying to base folder.
+Install Dhewm3 and Demo Pack of DOOM3 with the following command[^5]. 
 ```
-dhewm3 +set fs_basepath /home/HansWerner/Games/doom3
+sudo ./install_dhewm3.sh
 ```
-Reference: [dhewm3 - Doom3 Source Port](https://dhewm3.org/#how-to-install)
+Reference: [dhewm3 - Doom3 Source Port]()
 
-#### Run DOOM3
+Run DOOM3
 ```
 flatpak run org.dhewm3.Dhewm3
 #Run doom3 in full screen
@@ -206,11 +176,14 @@ flatpak run org.dhewm3.Dhewm3 +set r_fullscreen 1
 
 **Note**: With more than one monitors, the game windowed could be anywhere, while the fullscreen game  will be on the primary window. 
 
-Please refer to Enable Nvidia GPU accelerated Ubuntu Desktop to set up primary window.
-
-For more startup parameters, check this [document](https://modwiki.dhewm3.org/Startup_parameters).
+For more startup parameters, check this document[^6].
 
 ## Applications Development
 WIP
 ## References
-[^4]: https://remoteripple.com/
+[^1]: https://www.adlinktech.com/Products/Computer_on_Modules/COM-HPC-Server-Carrier-and-Starter-Kit/Ampere_Altra_Developer_Platform
+[^2]: https://www.nvidia.com/Download/driverResults.aspx/204838/en-us/
+[^3]: https://remoteripple.com/
+[^4]: https://flatpak.org/
+[^5]: https://dhewm3.org/#how-to-install
+[^6]: https://modwiki.dhewm3.org/Startup_parameters
