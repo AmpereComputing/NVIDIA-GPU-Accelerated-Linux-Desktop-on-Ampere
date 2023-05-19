@@ -4,7 +4,7 @@
 
 ## Summary
 
-This repo contains scripts and documents to assit in the installation of GPU accelerated Linux desktops,  applications, and application development.
+This repo contains scripts and documents to assist in the installation of GPU accelerated Linux desktops,  applications, and application development.
 
 ## Table of Contents
 * [Introduction](#introduction)
@@ -90,7 +90,7 @@ $ sudo reboot
 ##### Download and Install GPU Driver
 Download Nvidia GPU driver from Nvidia's site[^2] and install GPU driver with the follow script. 
 ```
-# Make sure the dirver package name is updated in the script
+# Make sure the driver package name is updated in the script
 $ ./install_gpu_driver.sh
 ```
 Check the GPU driver is working with the following command.
@@ -174,7 +174,7 @@ flatpak run org.dhewm3.Dhewm3
 flatpak run org.dhewm3.Dhewm3 +set r_fullscreen 1
 ```
 
-**Note**: With more than one monitors, the game windowed could be anywhere, while the fullscreen game  will be on the primary window. 
+**Note**: With more than one monitors, the game windowed could be anywhere, while the full-screen game  will be on the primary window. 
 
 For more startup parameters, check this document[^6].
 
