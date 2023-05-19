@@ -4,7 +4,7 @@
 
 ## Summary
 
-This repo contains scripts and documents to assit in the installation of Windows on Ampere Platforms.
+This repo contains scripts and documents to assit in the installation of GPU accelerated Linux desktops,  applications, and application development.
 
 ## Table of Contents
 * [Introduction](#introduction)
