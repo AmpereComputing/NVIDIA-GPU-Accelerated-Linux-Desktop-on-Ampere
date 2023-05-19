@@ -62,7 +62,8 @@ Install GPU at one of the two PCIex16 slots and connect power cables if needed.
 The box comes with a spare GPU power cable hidden at the back of motherboard. 
 
 ### Set Up Audio
-Mic/Speaker on the top of the case - A1 is not working. A2 is working
+Mic/Speaker on the top of the case - A1 does not not work, while those of A2 works.
+
 HDMI/DisplayPort Audio - recommended for audio via TV speaker. Both audio via HDMI and DisplayPort works. 
 
 Digital Output - No physical link/plug found
