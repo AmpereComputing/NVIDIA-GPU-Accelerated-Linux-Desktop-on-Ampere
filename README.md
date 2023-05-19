@@ -166,7 +166,6 @@ Install Dhewm3 and Demo Pack of DOOM3 with the following command[^5].
 ```
 sudo ./install_dhewm3.sh
 ```
-Reference: [dhewm3 - Doom3 Source Port]()
 
 Run DOOM3
 ```
