@@ -1,6 +1,6 @@
 ![Ampere Computing](https://avatars2.githubusercontent.com/u/34519842?s=400&u=1d29afaac44f477cbb0226139ec83f73faefe154&v=4)
 
-# GPU Accelerated Linux Desktop on Ampere
+# NVIDIA GPU Accelerated Linux Desktop on Ampere
 
 ## Summary
 
@@ -23,8 +23,9 @@ This repo contains scripts and documents to assist in the installation of GPU ac
   * [Install Flatpak](#install-flatpak)
   * [Install Dhewm3 - Open Source Version of DOOM3](#install-dhewm3---open-source-version-of-doom3)
   * [TODO]Paraview
+  * [TODO]Salome
+  * [TODO]GMSH
   * [TODO]Yolov8
-  * [TODO]HPC
 * [Application Development](#applications-development)
   * [TODO]Electron
   * [TODO]VS Code
@@ -43,7 +44,7 @@ This repo contains scripts and documents to assist in the installation of GPU ac
   * Optional: NVLINK
 
 ### Software 
-1.  Ubuntu 20.04 or 22.04 server for arm64
+1.  Ubuntu 20.04 or 22.04 (server) for arm64
 1. Nvidia GPU driver
 
 ## Hardware Environment
@@ -72,9 +73,10 @@ Digital Output - No physical link/plug found
 
 ### Install Ubuntu Desktop
 
-#### Install Ubuntu 20.04 or 22.04 with USB
-1. Download Ubuntu 22.04 server. 
-1. Install ubuntu with HWE
+#### Install Ubuntu 20.04 or 22.04 Server with USB
+1. Download Ubuntu 22.04 server 
+1. Install ubuntu with HWE Server
+
 
 #### Install GPU driver
 
