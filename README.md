@@ -251,6 +251,7 @@ sudo reboot forced-recovery
 
 In some cases one might need to flash a Jetson device. Here's how to do so on WSL2 on X86 (flashing with Arm64 host PC is not supported by Nvidia)
 
+Put your Jetson device in recovery mode, and connect with USB to host computer.
 Install wsl and detach usb: (run steps 1,2,4,5,7)
 https://forums.developer.nvidia.com/t/tutorial-using-sdkmanager-for-flashing-on-windows-via-wsl2-wslg/225759
 
@@ -268,14 +269,11 @@ For other devices like Xavier, Nano:
 https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3251/index.html#page/Tegra%20Linux%20Driver%20Package%20Development%20Guide/quick_start.html#wwpID0EAAMNHA
 
 
-
-----------------------------------------------------
 Other useful commands:
-
+```
 wsl -l to see a list of installed distro names
 wsl --unregister <DistroName>
-
-
+```
 
 
 ### Install and Running Yolov8 (on Jetson/Workstation)
