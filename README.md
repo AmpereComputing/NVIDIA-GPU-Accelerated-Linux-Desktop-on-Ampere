@@ -222,7 +222,8 @@ Basically just download and install docker desktop on windows, then wsl2 should 
 
 #### Setup flash environment in WSL2 with NGC Jetson flash container[^8]:
 
-Then download Sample Root Filesystem and driver package(BSP): Link[^9]
+Download "Sample Root Filesystem" and "base driver package(BSP)" to host: Link[^9]
+Start the Jetson flash container, map in the downloaded files with the -v flag:
 ```
 sudo docker run -it --privileged --net=host -v /dev/bus/usb:/dev/bus/usb -v /path/to/files:/workspace nvcr.io/nvidia/jetson-linux-flash-x86:r35.3.1
 #change the "path/to/files" to the directory that has the downloaded BSP and SFS files.
@@ -259,6 +260,7 @@ For Orin AGX this is "jetson-agx-orin-devkit", you can also emulate other device
 ./flash.sh --no-root-check jetson-agx-orin-devkit mmcblk0p1
 ```
 And after 20-30 minutes you are Done! Your Jetson will be like brand new.
+
 
 ### Install and Running Yolov8 (on Jetson/Workstation)
 #### Install DeepStream on Jetson
