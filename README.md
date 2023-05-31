@@ -191,7 +191,8 @@ If the Jetson device is powered on and can enter the OS, use ```sudo reboot forc
 Plug in the USB connection between the Jetson device and host computer.
 
 #### Install wsl in host PC and attach usb: (run steps 1,2,4,5,7 in this guide[^7])
-**Caution:** you must use wsl Ubuntu 18.04! 20.04 does not work.
+**Caution:** you must use wsl Ubuntu 18.04! Version 20.04 does not work.
+
 Useful commands for this section:
 ```
 #to see a list of installed distro names:
@@ -201,6 +202,7 @@ wsl --unregister <DistroName>
 ```
 
 After installing the correct wsl2 OS(Ubuntu 18.04), we need to attach the jetson as a USB device to WSL.
+
 Run powershell as admin, then:
 ```
 # To see the bus of the Jetson device plugged in as USB:
@@ -218,11 +220,11 @@ sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-too
 You should now see the Jetson device inside wsl by typing ```lsusb```. If not, close and reopen wsl.
 
 #### Install docker in wsl: 
-Basically just download and install docker desktop on windows, then wsl2 should be automatically enabled after rebooting the PC.
+Download and install docker desktop on windows, then wsl2 should be automatically enabled after rebooting the PC.
 
 #### Setup flash environment in WSL2 with NGC Jetson flash container[^8]:
-
 Download "Sample Root Filesystem" and "base driver package(BSP)" to host: Link[^9]
+
 Start the Jetson flash container, map in the downloaded files with the -v flag:
 ```
 sudo docker run -it --privileged --net=host -v /dev/bus/usb:/dev/bus/usb -v /path/to/files:/workspace nvcr.io/nvidia/jetson-linux-flash-x86:r35.3.1
@@ -253,8 +255,11 @@ sudo ./apply_binaries.sh
 ```
 
 #### Flash your Jetson using NGC Jetson flash container:
-You need to find the <board> name when executing the ./flash.sh command:
-For Orin AGX this is "jetson-agx-orin-devkit", you can also emulate other devices[^10]. For board name of other devices like Xavier, Nano:[^11]
+You need to find the <board> name when executing the ./flash.sh command.
+
+For Orin AGX this is ```jetson-agx-orin-devkit```, you can also emulate other devices[^10]. For board name of other devices like Xavier, Nano:[^11]
+
+Then start flashing your Jetson device.
 **Warning: This will wipe out all data currently on your Jetson.**
 ```
 ./flash.sh --no-root-check jetson-agx-orin-devkit mmcblk0p1
@@ -279,8 +284,9 @@ sudo mkdir -p /opt/nvidia/deepstream/deepstream-6.2/lib
 sudo cp /usr/local/lib/librdkafka* /opt/nvidia/deepstream/deepstream-6.2/lib
 ```
 
-Install deepstream 6.2 using the Jetson tar package:
+Install deepstream 6.2 using the Jetson tar package.
 Current link to download the package:[^13]
+
 After download, change directory to the folder with the downloaded tbz2 package:
 ```
 sudo tar -xvf deepstream_sdk_v6.2.0_jetson.tbz2 -C /
@@ -328,8 +334,8 @@ Edit the requirement.txt file: Prepend # to the line "torch" and "torchvision", 
 pip3 install -r requirements.txt
 ```
 
-#### Install pytorch. See reference here:[^14]
-#This following line might not be needed but it is reqd by previous pytorch(v1.8.0)
+#### Install pytorch (Reference[^14])
+This following line might not be needed but it is required by previous pytorch(v1.8.0)
 ```sudo apt-get install -y libopenblas-base libopenmpi-dev```
 
 Install the libraries:
@@ -337,11 +343,11 @@ Install the libraries:
 sudo apt-get -y install autoconf bc build-essential g++-8 gcc-8 clang-8 lld-8 gettext-base gfortran-8 iputils-ping libbz2-dev libc++-dev libcgal-dev libffi-dev libfreetype6-dev libhdf5-dev libjpeg-dev liblzma-dev libncurses5-dev libncursesw5-dev libpng-dev libreadline-dev libssl-dev libsqlite3-dev libxml2-dev libxslt-dev locales moreutils openssl python-openssl rsync scons python3-pip libopenblas-dev;
 ```
 
-Download the latest pytorch wheel from here:[^15]
-Latest version is 2.0.0. Run(Caution: sometimes Nvidia doesn't allow wget download, best way is to click on the link and download from browser):
+Download the latest pytorch wheel from here[^15], latest version is 2.0.0. Alternatively, run wget:
 ```
 wget https://developer.download.nvidia.cn/compute/redist/jp/v51/pytorch/torch-2.0.0a0+fe05266f.nv23.04-cp38-cp38-linux_aarch64.whl
 ```
+Caution: sometimes Nvidia doesn't allow wget download, best way is to click on the link and download from browser.
 
 Export the path to the downloaded file.(Example is in the ~ folder)
 ```
@@ -411,10 +417,12 @@ python3 export_yoloV8.py -w yolov8s.pt
 ```
 
 Note: To change the inference size (defaut: 640)
+```
 -s SIZE
 --size SIZE
 -s HEIGHT WIDTH
 --size HEIGHT WIDTH
+```
 
 Run Make.
 ```
@@ -468,5 +476,5 @@ You will see a Yolo application pop up with object detection. Congrats!
 [^15]: https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048
 [^16]: https://github.com/marcoslucianops/DeepStream-Yolo/blob/master/docs/YOLOv8.md
 [^17]: https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#configuration-groups
-[^18]: https://github.com/marcoslucianops/DeepStream-Yolo/blob/master/docs/customModels.md
+[^18]: https://github.com/marcoslucianops/DeepStream-Yolo/blob/master/docs/cus
 [^19]: https://maouriyan.medium.com/the-friendly-guide-to-build-deepstream-application-3e78cb36d9f2
