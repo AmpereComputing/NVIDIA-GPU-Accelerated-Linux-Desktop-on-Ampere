@@ -190,10 +190,20 @@ Follow the Nvidia "Getting Started Guide" on your Jetson device.
 If the Jetson device is powered on and can enter the OS, use ```sudo reboot forced-recovery``` to enter recovery mode.
 Plug in the USB connection between the Jetson device and host computer.
 
-#### Install wsl in host PC and attach usb: (run steps 1,2,4,5,7 in this guide[^7])
+#### Install wsl in host PC and attach usb (Reference[^7])
+Make sure your host computer has the latest release of Windows 11 (X86).
+
+Open PowerShell or Windows Command Prompt in **administrator mode**.
+
+Install WSL2 and Ubuntu 18.04 LTS and make sure your WSL2 kernel is up to date
+```
+wsl --install -d "Ubuntu-18.04"
+wsl --update
+```
+
 **Caution:** you must use wsl Ubuntu 18.04! Version 20.04 does not work.
 
-Useful commands for this section:
+Other useful commands for this section:
 ```
 #to see a list of installed distro names:
 wsl -l
@@ -201,8 +211,11 @@ wsl -l
 wsl --unregister <DistroName>
 ```
 
-After installing the correct wsl2 OS(Ubuntu 18.04), we need to attach the jetson as a USB device to WSL.
-
+In the same terminal, install usbipd-win
+```
+winget install --interactive --exact dorssel.usbipd-win 
+```
+Then use usbipd to **attach the jetson as a USB device** to WSL.
 Run powershell as admin, then:
 ```
 # To see the bus of the Jetson device plugged in as USB:
@@ -220,7 +233,7 @@ sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-too
 You should now see the Jetson device inside wsl by typing ```lsusb```. If not, close and reopen wsl.
 
 #### Install docker in wsl: 
-Download and install docker desktop on windows, then wsl2 should be automatically enabled after rebooting the PC.
+Download and install Docker Desktop on windows, then WSL2 should be automatically enabled after rebooting the PC.
 
 #### Setup flash environment in WSL2 with NGC Jetson flash container[^8]:
 Download "Sample Root Filesystem" and "base driver package(BSP)" to host: Link[^9]
@@ -321,7 +334,7 @@ echo $PATH
 pip3 --version
 ```
 
-#### Install ultralytics Yolo and requirements
+#### Install Ultralytics Yolo and requirements
 ```
 cd ~
 git clone https://github.com/ultralytics/ultralytics.git
