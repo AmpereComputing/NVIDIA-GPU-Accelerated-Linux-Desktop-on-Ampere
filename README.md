@@ -280,7 +280,9 @@ Then start flashing your Jetson device.
 And after 20-30 minutes you are Done! Your Jetson will be like brand new.
 
 
-### Install and Running Yolov8 (on Jetson/Workstation)
+### Install and Running Yolov8 (on bare metal Jetson/Workstation)
+For container solution, please see the next section.
+
 #### Install DeepStream on Jetson
 Link to Nvidia official document:[^12]
 
@@ -470,6 +472,59 @@ deepstream-app -c deepstream_app_config.txt
 ```
 You will see a Yolo application pop up with object detection. Congrats!
 
+### Install and Running Yolov8 (on Jetson/Workstation container)
+#### Start the NGC DeepStream container on Jetson(Reference[^20]):
+
+We use the DeepStream-l4t-Triton container as the base container to build our environment
+Please first make sure there is a display connected to your Jetson device.
+```
+xhost +
+sudo docker run -it --rm --net=host --runtime nvidia  -e DISPLAY=$DISPLAY -w /opt/nvidia/deepstream/deepstream-6.2 -v /tmp/.X11-unix/:/tmp/.X11-unix nvcr.io/nvidia/deepstream-l4t:6.2-triton
+```
+Make sure you used the tag <6.2-triton> for the container.
+Other tags like the base DeepStream-l4t container is not supported.
+
+Your terminal should now enter the docker bash. 
+
+#### Build the environment for YoloV8 in DeepStream-l4t container:
+In the container shell, please execute this following command to install other libraries.
+```
+/opt/nvidia/deepstream/deepstream/user_additional_install.sh
+```
+
+Then please follow the same steps in the section "Install and Running Yolov8 (on bare metal Jetson/Workstation)" above, from section "Install/upgrade pip3" to "Pull deepstream-yolo for Yolov8 test run and set configs", to set up YoloV8 running environment. The steps are mostly the same, except for some differences noted below:
+
+**Different steps:**
+1.Remove "sudo" for any installation script, the docker container is already running with root permissions
+
+2.When update pip3 as shown above, there's no need to change the path variable.
+
+3.When editing the requirements.txt file(i.e. ```vi requirements.txt```) before installing yolo requirements, only comment out the two lines of torch and torchvision. Do not uncomment onnx, it is already installed in this container.
+
+4.When downloading the pytorch wheel does not work, download the file to Jetson first, then use docker cp to copy into the container. For example:
+First find the DeepStream container id using ```docker ps```. Then copy the downloaded pytorch wheel file into the deepstream container(replace the "path/to" to the actual path to the file on Jetson host, and the <container ID> with the Jetson deepstream container ID):
+```
+docker cp /path/to/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl <container ID>:/root
+```
+
+#### Running YoloV8 in deepstream container (must have a monitor attached):
+After the environment is set in the container, use the same command inside the ```~/DeepStream``` folder to start the DeepStream app.
+```
+deepstream-app -c deepstream_app_config.txt
+```
+
+#### To commit this container:
+After everything is installed and Deepstream running successfully, you can choose to commit this container, so next time this committed image can be used to start running YoloV8 with deepstream.
+```
+docker commit <container ID> <repository>:<tag>
+```
+
+To start a commited container:
+```
+xhost +
+sudo docker run -it --rm --net=host --runtime nvidia  -e DISPLAY=$DISPLAY -w /opt/nvidia/deepstream/deepstream-6.2 -v /tmp/.X11-unix/:/tmp/.X11-unix <repository>:<tag>
+```
+
 
 ## References
 [^1]: https://www.adlinktech.com/Products/Computer_on_Modules/COM-HPC-Server-Carrier-and-Starter-Kit/Ampere_Altra_Developer_Platform
@@ -491,3 +546,10 @@ You will see a Yolo application pop up with object detection. Congrats!
 [^17]: https://docs.nvidia.com/metropolis/deepstream/dev-guide/text/DS_ref_app_deepstream.html#configuration-groups
 [^18]: https://github.com/marcoslucianops/DeepStream-Yolo/blob/master/docs/cus
 [^19]: https://maouriyan.medium.com/the-friendly-guide-to-build-deepstream-application-3e78cb36d9f2
+[^20]: https://catalog.ngc.nvidia.com/orgs/nvidia/containers/deepstream-l4t
+[^21]: 
+[^22]: 
+[^23]: 
+
+
+
