@@ -367,6 +367,7 @@ config-file=config_infer_primary_yoloV8.txt
 file-loop=1
 ```
 You can also configure the input video and resolution of the run. For more information:[^17] [^18] [^19]
+For multistream configuration, see [^21]
 
 #### To run Yolov8 (must have a monitor attached):
 ```
@@ -374,7 +375,57 @@ deepstream-app -c deepstream_app_config.txt
 ```
 You will see a Yolo application pop up with object detection. Congrats!
 
-### Install and Running Yolov8 (on Jetson/Workstation container)
+### Install and Running Yolov8 (on Workstation container)
+Prerequisite: Nvidia GPU and GPU driver installed on Workstation.
+Nvidia container toolkit installed.
+#### TODO: Installation scripts
+
+Things to note: All relevant libraries/tools like CUDA, cuDNN, TensorRT will be enabled on Workstation for YOLO run, except DeepStream. DeepStream is only available in Jetson and X86 systems, so currently cannot be incorporated in workstation. YOLO is fully functional regardless of DeepStream installation.
+
+We will use the pytorch image from NGC. This image has CUDA, cuDNN and TensorRT environment prebuilt.
+```
+sudo docker run --net=host -e DISPLAY=$DISPLAY --gpus all -it --rm --shm-size=1024M nvcr.io/nvidia/pytorch:23.04-py3
+```
+
+#### Install YOLO:
+Note: pip is prebuilt in the container image. So you can just run this in the container to install YOLO:
+```
+pip install ultralytics
+```
+
+#### Test YOLO installation from command line:
+```
+yolo predict model=yolov8n.pt source='https://ultralytics.com/images/bus.jpg'
+ls runs/detect/predict/bus.jpg
+```
+
+#### Test YOLO installation by running a Python script:
+```
+vi run.py
+```
+
+Paste the following content into the python file:
+```
+from ultralytics import YOLO
+# Load a model
+model = YOLO("yolov8n.yaml")  # build a new model from scratch
+model = YOLO("yolov8n.pt")  # load a pretrained model (recommended for training)
+# Use the model
+model.train(data="coco128.yaml", epochs=3)  # train the model
+metrics = model.val()  # evaluate model performance on the validation set
+results = model("https://ultralytics.com/images/bus.jpg")  # predict on an image
+path = model.export(format="onnx")  # export the model to ONNX format
+```
+
+Execute the file:
+```
+python3 run.py
+```
+
+TODO:failed when executing "pip install onnxruntime-gpu"
+
+
+### Install and Running Yolov8 (on Jetson container)
 #### Start the NGC DeepStream container on Jetson(Reference[^20]):
 
 We use the DeepStream-l4t-Triton container as the base container to build our environment
@@ -449,7 +500,7 @@ sudo docker run -it --rm --net=host --runtime nvidia  -e DISPLAY=$DISPLAY -w /op
 [^18]: https://github.com/marcoslucianops/DeepStream-Yolo/blob/master/docs/cus
 [^19]: https://maouriyan.medium.com/the-friendly-guide-to-build-deepstream-application-3e78cb36d9f2
 [^20]: https://catalog.ngc.nvidia.com/orgs/nvidia/containers/deepstream-l4t
-[^21]: 
+[^21]: https://wiki.seeedstudio.com/YOLOv8-DeepStream-TRT-Jetson/#multistream-configuration
 [^22]: 
 [^23]: 
 
