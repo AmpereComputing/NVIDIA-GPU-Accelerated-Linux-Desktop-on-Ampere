@@ -175,11 +175,148 @@ flatpak run org.dhewm3.Dhewm3
 #Run doom3 in full screen
 flatpak run org.dhewm3.Dhewm3 +set r_fullscreen 1
 ```
-
 **Note**: With more than one monitors, the game windowed could be anywhere, while the full-screen game  will be on the primary window. 
 
 For more startup parameters, check this document[^6].
 
+### Enable Arm32 (Armhf) environment
+Ampere Altra family processors support both Arm64 and Arm32, but to run Arm32 applications on Arm64 OS, an Arm32 environment need to be created. On Ubuntu 64 OS, the approach is `debootstrap` for `chroot`. 
+
+#### Install debootstrap
+```
+sudo apt install schroot debootstrap
+sudo mkdir /srv/chroot
+sudo mkdir /srv/chroot/debian-armhf
+sudo debootstrap --arch armhf --foreign buster /srv/chroot/debian-armhf http://debian.xtdv.net/debian
+sudo chroot "/srv/chroot/debian-armhf" /debootstrap/debootstrap --second-stage
+```
+
+Then add a config file for `debian-armhf`:
+```
+sudo nano /etc/schroot/chroot.d/debian-armhf.conf
+```
+Copy paste this code, and change <username> into your computer username
+```
+[debian-armhf]
+description=Debian Armhf chroot
+aliases=debian-armhf
+type=directory
+directory=/srv/chroot/debian-armhf
+profile=desktop
+personality=linux
+preserve-environment=true
+root-users=<username>
+users=<username>
+```
+#### Then edit the nssdatabases
+```
+sudo nano /etc/schroot/desktop/nssdatabases
+```
+copy paste this code
+```
+# System databases to copy into the chroot from the host system.
+#
+# <database name>
+#passwd
+shadow
+#group
+gshadow
+services
+protocols
+#networks
+#hosts
+#user
+```
+#### Edit the stateoverride, and change the first contrab to root
+```
+sudo nano /srv/chroot/debian-armhf/var/lib/dpkg/statoverride
+```
+copy paste this code
+```
+root root 2755 /usr/bin/crontab
+```
+#### Now you should be able to schroot by typing
+```
+sudo schroot -c debian-armhf
+```
+#### Edit the bashrc
+```
+nano ~/.bashrc
+```
+add this code to the bottom of the line
+```
+export LANGUAGE="C"
+export LC_ALL="C"
+export DISPLAY=:0
+```
+### let's restart chroot environment by exit and login again, then add a username that is similar to your main system username
+
+```
+exit
+id
+sudo schroot -c debian-armhf
+adduser <username>
+su - <username>
+```
+then again add bashrc
+``
+nano ~/.bashrc
+```
+again add this code to the bottom of the line
+```
+export LANGUAGE="C"
+export LC_ALL="C"
+export DISPLAY=:0
+```
+#### Then restart chroot by double exit and login again, then install the following package
+```
+exit
+sudo schroot -c debian-armhf
+apt update && apt upgrade
+```
+More details on setting up Arm32 environment [^7].
+
+### Install AnyDesk
+Download RPi version `anydesk_6.2.1-1_armhf.deb`
+```
+
+echo deb http://archive.raspberrypi.org/debian/ bullseye main | sudo tee /etc/apt/sources.list.d/raspberrypi.list
+deb http://archive.raspberrypi.org/debian/ bullseye main
+
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7FA3303E
+
+wget -qO - http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | sudo apt-key add -
+
+
+sudo dpkg --add-architecture armhf
+sudo apt install libpolkit-gobject-1-0:armhf libraspberrypi0:armhf libraspberrypi-dev:armhf libraspberrypi-bin:armhf libgles-dev:armhf libegl-dev:armhf
+sudo ln -s /usr/lib/arm-linux-gnueabihf/libGLESv2.so /usr/lib/libbrcmGLESv2.so
+sudo ln -s /usr/lib/arm-linux-gnueabihf/libEGL.so /usr/lib/libbrcmEGL.so
+```
+Create and Enter Arm32 environment.
+```
+dpkg -i anydesk_6.2.1-1_armhf.deb
+# Error messages on dependencies
+
+# Install dependency
+apt-get -f install
+```
+
+```
+(debian-armhf)root@adlink:/home/ampere/Downloads# ldd /usr/bin/anydesk
+
+  ...
+  libpolkit-gobject-1.so.0 => not found
+  ...
+	libbcm_host.so => not found
+	libvcos.so => not found
+	libvchiq_arm.so => not found
+	libbrcmGLESv2.so => not found
+	libbrcmEGL.so => not found
+  ...
+
+  apt-get install -y libpolkit-gobject-1-dev
+```
 ## Applications Development
 WIP
 ## References
@@ -189,3 +326,4 @@ WIP
 [^4]: https://flatpak.org/
 [^5]: https://dhewm3.org/#how-to-install
 [^6]: https://modwiki.dhewm3.org/Startup_parameters
+[^7]: https://forum.armbian.com/topic/16584-install-box86-on-arm64/
