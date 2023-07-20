@@ -33,7 +33,7 @@ This repo contains scripts and documents to assist in the installation of GPU ac
   * [TODO]Android Studio
   * [TODO]Jetson 
 * [Application Libraries](#applications-libraries)
-  * OpenCL(#opencl)
+  * [OpenCL](#opencl)
 * [References](#references)
 
 ## Introduction
