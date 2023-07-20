@@ -301,8 +301,6 @@ dpkg -i anydesk_6.2.1-1_armhf.deb
 # Error messages on dependencies
 
 # Install dependency
-apt-get -f install
-```
 
 ```
 (debian-armhf)root@adlink:/home/ampere/Downloads# ldd /usr/bin/anydesk
