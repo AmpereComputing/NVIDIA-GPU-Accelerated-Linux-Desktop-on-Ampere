@@ -32,6 +32,8 @@ This repo contains scripts and documents to assist in the installation of GPU ac
   * [TODO]Flutter
   * [TODO]Android Studio
   * [TODO]Jetson 
+* [Application Libraries](#applications-libraries)
+  * OpenCL(#opencl)
 * [References](#references)
 
 ## Introduction
@@ -319,6 +321,24 @@ apt-get -f install
 ```
 ## Applications Development
 WIP
+
+## Application Libraries
+### OpenCL
+Although OpenCL on Arm is not well supported from Nvidia[^8] and AMD, but PoCL[^9] can be the workaround. 
+Here is the steps to install pocl(-cuda) and check OpenCL info. 
+```
+# https://github.com/pocl/pocl
+$ wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh
+$ bash Mambaforge-$(uname)-$(uname -m).sh  # install mambaforge
+# Agree to license, and Yes to all questions
+$ cd ~/mambaforge/bin/
+$ ./mamba install pocl-cuda
+# $ ./mamba install pocl
+$ sudo apt install clinfo
+$ clinfo
+```
+Note: there might some errors reported on clinfo. 
+
 ## References
 [^1]: https://www.adlinktech.com/Products/Computer_on_Modules/COM-HPC-Server-Carrier-and-Starter-Kit/Ampere_Altra_Developer_Platform
 [^2]: https://www.nvidia.com/Download/driverResults.aspx/204838/en-us/
@@ -327,3 +347,5 @@ WIP
 [^5]: https://dhewm3.org/#how-to-install
 [^6]: https://modwiki.dhewm3.org/Startup_parameters
 [^7]: https://forum.armbian.com/topic/16584-install-box86-on-arm64/
+[^8]: https://developer.nvidia.com/opencl
+[^9]: https://github.com/pocl/pocl
