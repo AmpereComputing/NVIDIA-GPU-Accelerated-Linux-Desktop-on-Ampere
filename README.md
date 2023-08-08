@@ -384,7 +384,7 @@ Things to note: All relevant libraries/tools like CUDA, cuDNN, TensorRT will be 
 
 We will use the pytorch image from NGC. This image has CUDA, cuDNN and TensorRT environment prebuilt.
 ```
-sudo docker run --net=host -e DISPLAY=$DISPLAY --gpus all -it --rm --shm-size=1024M nvcr.io/nvidia/pytorch:23.04-py3
+sudo docker run --net=host -e DISPLAY=$DISPLAY --gpus all -it --rm --shm-size=1024M nvcr.io/nvidia/pytorch:23.06-py3
 ```
 
 #### Install YOLO:
