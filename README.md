@@ -92,12 +92,12 @@ $ sudo update-grub
 $ sudo reboot
 ```
 ##### Download and Install GPU Driver
-Download Nvidia GPU driver from Nvidia's site[^2] and install GPU driver with the follow script. 
+Download Nvidia GPU driver from Nvidia's site[^2] and install GPU driver with the following script. 
 ```
 # Make sure the driver package name is updated in the script
 $ ./install_gpu_driver.sh
 ```
-Check the GPU driver is working with the following command.
+Reboot the machine with `sudo reboot`, then check the GPU driver is working with the following command.
 ```
 nvidia-smi
 ```
