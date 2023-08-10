@@ -187,14 +187,16 @@ For more startup parameters, check this document[^6].
 Prerequisites: 
 1.Nvidia GPU and GPU driver installed on Workstation.
 [Install GPU driver](#install-gpu-driver)
+
 2.Nvidia container toolkit installed.
 [Install Docker and NVIDIA Container Toolkit](https://github.com/AmpereComputing/Jetson-on-Ampere#install-docker-and-nvidia-container-toolkit)
 
-Things to note: All relevant libraries/tools like CUDA, cuDNN, TensorRT will be enabled on Workstation for YOLO run, except DeepStream. DeepStream is only available in Jetson and X86 systems, so currently cannot be incorporated in workstation. YOLO is fully functional regardless of DeepStream installation.
+Notes: All relevant libraries/tools like CUDA, cuDNN, TensorRT will be enabled on Workstation for YOLO run, except DeepStream, which is only available in Jetson and X86 systems. YOLO works without DeepStream installation.
 
 We will use the pytorch image from NGC. This image has CUDA, cuDNN and TensorRT environment prebuilt.
 ```
-sudo docker run --net=host -e DISPLAY=$DISPLAY --gpus all -it --rm --shm-size=1024M nvcr.io/nvidia/pytorch:23.06-py3
+xhost +
+sudo docker run --net=host -e DISPLAY=$DISPLAY --gpus all -it --rm --shm-size=1024M nvcr.io/nvidia/pytorch:23.05-py3
 ```
 
 #### Install YOLO:
@@ -209,7 +211,7 @@ yolo predict model=yolov8n.pt source='https://ultralytics.com/images/bus.jpg'
 ls runs/detect/predict/bus.jpg
 ```
 
-#### Test YOLO installation by running a Python script:
+#### Alternatively, test YOLO installation by running a Python script:
 ```
 vi run.py
 ```
